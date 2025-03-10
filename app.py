@@ -19,12 +19,11 @@ from diffusers import (
 import tempfile
 import time
 from share_btn import community_icon_html, loading_icon_html, share_js
-# import user_history
 from illusion_style import css
 import os
 from transformers import CLIPImageProcessor
 from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
-
+#from user_history import UserHistory
 BASE_MODEL = "SG161222/Realistic_Vision_V5.1_noVAE"
 
 # Initialize both pipelines
@@ -148,7 +147,7 @@ def inference(
     seed: int = -1,
     sampler = "DPM++ Karras SDE",
     progress = gr.Progress(track_tqdm=True),
-    profile: gr.OAuthProfile | None = None,
+    #profile: gr.OAuthProfile | None = None,
 ):
     start_time = time.time()
     start_time_struct = time.localtime(start_time)
@@ -198,22 +197,22 @@ def inference(
     print(f"Inference ended at {end_time_formatted}, taking {end_time-start_time}s")
 
     # # Save image + metadata
-    # user_history.save_image(
-    #     label=prompt,
-    #     image=out_image["images"][0],
-    #     profile=profile,
-    #     metadata={
-    #         "prompt": prompt,
-    #         "negative_prompt": negative_prompt,
-    #         "guidance_scale": guidance_scale,
-    #         "controlnet_conditioning_scale": controlnet_conditioning_scale,
-    #         "control_guidance_start": control_guidance_start,
-    #         "control_guidance_end": control_guidance_end,
-    #         "upscaler_strength": upscaler_strength,
-    #         "seed": seed,
-    #         "sampler": sampler,
-    #     },
-    # )
+    # #user_history.save_image(
+    # #    label=prompt,
+    # #    image=out_image["images"][0],
+    # #    profile=profile,
+    # #    metadata={
+    # #        "prompt": prompt,
+    # #        "negative_prompt": negative_prompt,
+    # #        "guidance_scale": guidance_scale,
+    # #        "controlnet_conditioning_scale": controlnet_conditioning_scale,
+    # #        "control_guidance_start": control_guidance_start,
+    # #        "control_guidance_end": control_guidance_end,
+    # #        "upscaler_strength": upscaler_strength,
+    # #        "seed": seed,
+    # #        "sampler": sampler,
+    # #    },
+    # #)
 
     return out_image["images"][0], gr.update(visible=True), gr.update(visible=True), my_seed
         
@@ -276,13 +275,13 @@ with gr.Blocks() as app:
     
     share_button.click(None, [], [], js=share_js)
 
-with gr.Blocks(css=css) as app_with_history:
+with gr.Blocks(css=css) as app:
     with gr.Tab("Demo"):
         app.render()
-    # with gr.Tab("Past generations"):
-    #     user_history.render()
+    #with gr.Tab("Past generations"):
+    #    user_history.render()
 
-app_with_history.queue(max_size=20,api_open=False )
+app.queue(max_size=20,api_open=False)
 
 if __name__ == "__main__":
-    app_with_history.launch(max_threads=400, share=True)
+    app.launch(max_threads=400, share=True)
