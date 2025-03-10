@@ -19,7 +19,7 @@ from diffusers import (
 import tempfile
 import time
 from share_btn import community_icon_html, loading_icon_html, share_js
-import user_history
+# import user_history
 from illusion_style import css
 import os
 from transformers import CLIPImageProcessor
@@ -197,23 +197,23 @@ def inference(
     end_time_formatted = time.strftime("%H:%M:%S", end_time_struct)
     print(f"Inference ended at {end_time_formatted}, taking {end_time-start_time}s")
 
-    # Save image + metadata
-    user_history.save_image(
-        label=prompt,
-        image=out_image["images"][0],
-        profile=profile,
-        metadata={
-            "prompt": prompt,
-            "negative_prompt": negative_prompt,
-            "guidance_scale": guidance_scale,
-            "controlnet_conditioning_scale": controlnet_conditioning_scale,
-            "control_guidance_start": control_guidance_start,
-            "control_guidance_end": control_guidance_end,
-            "upscaler_strength": upscaler_strength,
-            "seed": seed,
-            "sampler": sampler,
-        },
-    )
+    # # Save image + metadata
+    # user_history.save_image(
+    #     label=prompt,
+    #     image=out_image["images"][0],
+    #     profile=profile,
+    #     metadata={
+    #         "prompt": prompt,
+    #         "negative_prompt": negative_prompt,
+    #         "guidance_scale": guidance_scale,
+    #         "controlnet_conditioning_scale": controlnet_conditioning_scale,
+    #         "control_guidance_start": control_guidance_start,
+    #         "control_guidance_end": control_guidance_end,
+    #         "upscaler_strength": upscaler_strength,
+    #         "seed": seed,
+    #         "sampler": sampler,
+    #     },
+    # )
 
     return out_image["images"][0], gr.update(visible=True), gr.update(visible=True), my_seed
         
@@ -279,8 +279,8 @@ with gr.Blocks() as app:
 with gr.Blocks(css=css) as app_with_history:
     with gr.Tab("Demo"):
         app.render()
-    with gr.Tab("Past generations"):
-        user_history.render()
+    # with gr.Tab("Past generations"):
+    #     user_history.render()
 
 app_with_history.queue(max_size=20,api_open=False )
 
