@@ -275,11 +275,9 @@ with gr.Blocks() as app:
     
     share_button.click(None, [], [], js=share_js)
 
-with gr.Blocks(css=css) as app:
-    with gr.Tab("Demo"):
-        app.render()
-    #with gr.Tab("Past generations"):
-    #    user_history.render()
+# with gr.Blocks(css=css) as app:
+#     with gr.Tab("Demo"):
+#         app.render()
 
 app.queue(max_size=20,api_open=False)
 
